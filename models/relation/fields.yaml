@@ -1,0 +1,24 @@
+fields:
+    target:
+        label: Form
+        nameFrom: title
+        descriptionFrom: description
+        span: full
+        type: relation
+        commentAbove: 'The related form'
+    field:
+        label: Relation
+        span: full
+        type: text
+        commentAbove: 'The relation field on the model'
+    title:
+        label: Title
+        span: full
+        type: text
+        commentAbove: 'Title to be displayed'
+    required_min:
+        label: 'Required minimum'
+        span: full
+        placeholder: ''
+        type: number
+        commentAbove: 'Number of elements user has to submit on this relation in order to complete the form'

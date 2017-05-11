@@ -1,0 +1,7 @@
+fields:
+    email:
+        label: Email
+        oc.commentPosition: above
+        span: full
+        required: 1
+        type: text

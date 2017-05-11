@@ -1,0 +1,41 @@
+{% set forms = __SELF__.getForms() %}
+
+{% if forms|length == 0 %}
+    <p class="flash-message static warning">
+        There are no active forms yet.
+    </p>
+{% else %}
+    {% for form in forms %}
+        <div>
+            <h3>{{ form.title }}</h3>
+            
+            <i class="icon-clock-o"></i>
+            
+            {% if form.opens_at %}
+                {{ form.opens_at.toDayDateTimeString()  }}
+            {% else %}
+                open start
+            {% endif %}
+            -
+            {% if form.closes_at %}
+                {{ form.closes_at.toDayDateTimeString() }}
+            {% else %}
+                open end
+            {% endif %}
+            
+            <p>
+                {{ form.introduction | raw }}
+
+                {% if form.tac_enabled %}
+                   {{ form.tac | raw }}
+                {% endif %}
+            </p>
+            <div id="fs-form-{{ form.id }}">
+                {% partial '@app/form' form=form %}
+            </div>
+        </div>
+    {% endfor %}
+
+{% endif %}
+
+

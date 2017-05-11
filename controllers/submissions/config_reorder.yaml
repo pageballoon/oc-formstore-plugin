@@ -1,0 +1,4 @@
+title: Submissions
+modelClass: nocio\FormStore\Models\Submission
+toolbar:
+    buttons: reorder_toolbar

@@ -1,0 +1,40 @@
+plugin:
+    name: 'nocio.formstore::lang.plugin.name'
+    description: 'nocio.formstore::lang.plugin.description'
+    author: 'Frithjof Gressmann'
+    icon: oc-icon-database
+    homepage: 'http://www.noc.io'
+permissions:
+    nocio.formstore.manage_forms:
+        tab: Forms
+        label: 'Manage forms'
+    nocio.formstore.view_submissions:
+        tab: Submissions
+        label: 'View submissions'
+    nocio.formstore.manage_submissions:
+        tab: Submissions
+        label: 'Manage submissions'
+navigation:
+    main-menu-item:
+        label: Forms
+        url: nocio/formstore/forms
+        icon: icon-paperclip
+        order: ''
+        sideMenu:
+            forms-menu-item:
+                label: Forms
+                url: nocio/formstore/forms
+                icon: icon-file-text-o
+                permissions:
+                    - nocio.formstore.manage_forms
+            submissions-menu-item:
+                label: Submissions
+                url: nocio/formstore/submissions
+                icon: icon-files-o
+                permissions:
+                    - nocio.formstore.view_submissions
+                    - nocio.formstore.manage_submissions
+            submitter-menu-item:
+                label: Submitter
+                url: nocio/formstore/submitters
+                icon: icon-users

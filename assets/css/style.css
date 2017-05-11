@@ -1,0 +1,33 @@
+.fs-header {
+	padding: 3% 5% 6% 5%;
+	background-color: slategrey;
+}
+.fs-nav {
+	padding: 15px 15px 0px 15px;
+        margin-bottom: 4%;
+	background-color: #f9f9f9;
+	position: -webkit-sticky;
+	top: 45px;
+	z-index: 1;
+        box-shadow: 0 2px 2px -2px #888888;
+        /*box-shadow-bottom: 0 0 5px #888888;*/
+}
+.fs-header, .fs-nav {
+	text-align: center;
+	color: #fff;
+}
+.fs-content {
+	width: 800px;
+	margin: 0 auto;
+        padding-top: 30px;
+        padding-bottom: 50px;
+}
+
+.sticky {
+	position: fixed;
+	width: 100%;
+	left: 0;
+	top: 0;
+	z-index: 100;
+	border-top: 0;
+}

@@ -1,0 +1,175 @@
+{% set submissions = __SELF__.submitter.submissions().byForm(form).latest().get() %}
+
+<div>
+
+    {% if form.opens_at.isFuture() %}
+        <p class="flash-message static info">
+            Form will open in {{ form.opens_at.diffForHumans() }}.
+        </p>
+    {% elseif form.closes_at.isPast() %}
+        <p class="flash-message static error">
+            Submissions closed {{ form.closes_at.diffForHumans() }}.
+        </p>
+    {% else %}
+        {% if not __SELF__.submitter.submittedMaximum(form)  %}
+            <div class="control-toolbar">
+                <div class="toolbar-item toolbar-primary">
+                    <div data-control="toolbar">
+                        <button class="btn btn-default btn-success"
+                            data-request="{{ __SELF__ }}::onCreate"
+                            data-request-data="form: {{ form.id }}"
+                            {% if form.tac_enabled %}
+                            data-request-confirm="You agree to the stated terms & conditions"
+                            {% endif %}>
+                        {% if submissions | length == 0 %}
+                            <i class="icon-check"></i> Start
+                        {% else %}
+                            <i class="icon-plus"></i> Add
+                        {% endif %}
+                     </button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+    {% for submission in submissions %}
+        <table class="table data">
+            <thead>
+                {% set errors = submission.getErrors() %}
+                <tr>
+                    <td>
+                        {% if submission.status != 1 %}
+                            <a href="javascript:;" 
+                               data-request="{{ __SELF__ }}::onEdit"
+                               data-request-data="submission: {{ submission.id }}">
+                        {% endif %}
+                        <span>
+                            {{ submission.title(' | ') }}
+                            Started {{ submission.created_at.diffForHumans() }}
+                        </span>
+                        {% if submission.status != 1 %}
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td style="width: 150px;">
+                        <span>
+                        {% if submission.status == 2 %}
+                            <span class="list-badge badge-success">
+                                <i class="icon-check"></i>
+                            </span>
+                            Submitted
+                        {% elseif submission.status == 1 %}
+                            <span class="list-badge badge-danger">
+                                <i class="icon-times"></i>
+                            </span>
+                            Cancelled
+                        {% elseif errors | length == 0 %}
+                            <span class="list-badge badge-info">
+                                <i class="icon-info"></i>
+                            </span>
+                            Draft
+                        {% else %}
+                            <span class="list-badge badge-warning">
+                                <i class="icon-exclamation"></i>
+                            </span>
+                            Incomplete
+                        {% endif %}
+                        </span>
+                    </td>
+                </tr>
+            </thead>
+            {% if submission.writable() %}
+            <tbody>
+                <tr>
+                    <td colspan="100">
+                        
+                        <button
+                            data-request="{{ __SELF__ }}::onEdit"
+                            data-request-data="submission: {{ submission.id }}"
+                            style="float:right; margin-right: 30px;"
+                            class="btn btn-info btn-sm">
+                            <i class="icon-pencil"></i>
+                            Edit
+                        </button>
+                        
+                        {% if errors | length > 0 %}
+                        <p>
+                            <i class="icon-warning"></i>
+                            Not ready for submission ({{ errors | length }} issues)</p>
+                        <ul>
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p>
+                            <i class="icon-check"></i> {{ form.title }} is ready for submission
+                        </p>
+                        {% endif %}
+                        
+                        
+                        
+                        {% set relations = form.rels().get() %}
+                        {% for relation in relations %}
+                            <div id="fs-form-{{ submission.id }}-relation-{{ relation.id }}">
+                                {% partial '@app/relation' submission=submission relation=relation %}
+                            </div>
+                        {% endfor %}
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="100">
+                        {% if errors | length == 0 %}
+                        <button class="btn btn-warning oc-icon-share"
+                                data-request="{{ __SELF__ }}::onSubmitSubmission"
+                                data-request-data="submission: {{ submission.id }}"
+                                data-request-confirm="Are you sure?">
+                            Submit
+                        </button>
+                        {% endif %}
+
+                        <button class="btn btn-default btn-danger oc-icon-trash"
+                                style="float: right;"
+                                data-request="{{ __SELF__ }}::onCancelSubmission"
+                                data-request-data="submission: {{ submission.id }}"
+                                data-request-confirm="Are you sure?">
+                            Cancel
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            {% elseif submission.status != 1 %}
+            <tbody>
+                <tr>
+                    <td colspan="100">
+                        
+                        <button
+                            data-request="{{ __SELF__ }}::onEdit"
+                            data-request-data="submission: {{ submission.id }}"
+                            style="float:right; margin-right: 30px;"
+                            class="btn btn-info btn-sm">
+                            <i class="icon-eye"></i>
+                            View
+                        </button>
+                        
+                        <p>
+                            <i class="icon-lock"></i> Read-only
+                        </p>
+
+                        {% set relations = form.rels().get() %}
+                        {% for relation in relations %}
+                            <div id="fs-form-{{ submission.id }}-relation-{{ relation.id }}">
+                                {% partial '@app/relation' submission=submission relation=relation %}
+                            </div>
+                        {% endfor %}
+                    </td>
+                    
+                </tr>
+            </tbody>
+            {% endif %}
+        </table>
+    {% endfor %}
+</div>

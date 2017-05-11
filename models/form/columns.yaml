@@ -1,0 +1,20 @@
+columns:
+    key:
+        label: Key
+        type: text
+        invisible: true
+    title:
+        label: Title
+        type: text
+        searchable: true
+    opens_at:
+        label: 'Opens at'
+        type: datetime
+        sortable: true
+    closes_at:
+        label: 'Closes at'
+        type: datetime
+    tac_enabled:
+        label: 'Use TaC'
+        type: switch
+        sortable: true

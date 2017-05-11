@@ -1,0 +1,4 @@
+title: Submitters
+modelClass: nocio\FormStore\Models\Submitter
+toolbar:
+    buttons: reorder_toolbar

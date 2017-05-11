@@ -1,0 +1,14 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table nocio_formstore_forms'
+    - builder_table_create_nocio_formstore_forms.php
+1.0.3:
+    - 'Created table nocio_formstore_submissions'
+    - builder_table_create_nocio_formstore_submissions.php
+1.0.4:
+    - 'Created table nocio_formstore_submitters'
+    - builder_table_create_nocio_formstore_submitters.php
+1.0.5:
+    - 'Created table nocio_formstore_relations'
+    - builder_table_create_nocio_formstore_relations.php

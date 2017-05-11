@@ -1,0 +1,10 @@
+name: Submitters
+form: $/nocio/formstore/models/submitter/fields.yaml
+modelClass: nocio\FormStore\Models\Submitter
+defaultRedirect: nocio/formstore/submitters
+create:
+    redirect: 'nocio/formstore/submitters/update/:id'
+    redirectClose: nocio/formstore/submitters
+update:
+    redirect: nocio/formstore/submitters
+    redirectClose: nocio/formstore/submitters

@@ -1,0 +1,62 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>{{ this.page.title }}</title>
+
+    <meta name="description" content="{{ this.page.meta_description }}">
+    <meta name="title" content="{{ this.page.meta_title }}">
+    <meta name="author" content="October CMS">
+
+    <link href="/modules/system/assets/ui/storm.css" rel="stylesheet">
+    <link href="/plugins/nocio/formstore/assets/css/style.css" rel="stylesheet">
+    
+    <script src="/modules/backend/assets/js/vendor/jquery.min.js"></script>
+    <script src="/modules/system/assets/js/framework.js"></script>
+    <script src="/modules/system/assets/ui/storm-min.js"></script>
+    
+    <!--<link href="/modules/backend/formwidgets/fileupload/assets/css/fileupload.css" rel="stylesheet">-->
+    <link href="/plugins/nocio/formstore/assets/css/uploader.css" rel="stylesheet">
+    <script src="/plugins/nocio/formstore/assets/vendor/dropzone/dropzone.js"></script>
+    <script src="/plugins/nocio/formstore/assets/js/uploader.js"></script>
+    
+ 
+    {% styles %}
+</head>
+
+<body>
+    <div class="fs-header">
+        
+        <div style="float:right;">
+            <i class="icon-street-view"></i> {{ __SELF__.submitter.email }} &nbsp;&nbsp;
+
+            <button type="button" 
+                    class="btn btn-danger oc-icon-power-off"
+
+                    data-request="{{ __SELF__ }}::onSignout"
+                    data-request-success="window.location = window.location.href.split('?')[0];"
+                    data-request-confirm="Are you sure?">
+                Sign out
+            </button>
+        </div>
+
+    </div>
+    
+    <div class="fs-content" id="app">
+        {% partial '@app/forms' %}
+    </div>
+    
+    {% flash %}
+        <p
+            data-control="flash-message"
+            class="flash-message fade {{ type }}"
+            data-interval="5">
+            {{ message }}
+        </p>
+    {% endflash %}
+    
+    {% scripts %}
+</body>
+</html>

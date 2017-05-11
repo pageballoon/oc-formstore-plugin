@@ -1,0 +1,86 @@
+fields:
+    title:
+        label: Title
+        oc.commentPosition: ''
+        span: full
+        type: text
+    model:
+        label: Model
+        span: full
+        placeholder: ''
+        default: ''
+        type: text
+        commentAbove: 'Namespace path to model e.g. Rainlab\Blog\Models\Post'
+    fields_config:
+        label: Fields
+        span: full
+        default: fields.yaml
+        type: text
+        commentAbove: 'The path to the fields YAML config file.'
+tabs:
+    fields:
+        max_per_user:
+            label: 'Maximum submissions per user'
+            oc.commentPosition: ''
+            span: full
+            placeholder: ''
+            default: '1'
+            type: number
+            tab: Settings
+        opens_at:
+            label: 'Opens at'
+            oc.commentPosition: ''
+            mode: datetime
+            span: auto
+            type: datepicker
+            tab: Settings
+        closes_at:
+            label: 'Closes at'
+            span: auto
+            oc.commentPosition: ''
+            mode: datetime
+            type: datepicker
+            tab: Settings
+        introduction:
+            label: Introduction
+            size: large
+            oc.commentPosition: ''
+            span: full
+            type: richeditor
+            tab: Settings
+        tac_enabled:
+            label: 'User has to agree to the following terms and conditions'
+            span: full
+            type: switch
+            tab: Settings
+        tac:
+            label: 'Terms and Conditions'
+            span: full
+            size: huge
+            oc.commentPosition: ''
+            type: richeditor
+            tab: Settings
+        validation:
+            label: Rules
+            prompt: 'Add new item'
+            span: full
+            type: repeater
+            commentAbove: 'Validation rules that will be checked before submission (see https://octobercms.com/docs/services/validation for more details)'
+            tab: Validation
+            form:
+                fields:
+                    field:
+                        label: Field
+                        span: full
+                        type: text
+                    rule:
+                        label: Rule
+                        oc.commentPosition: above
+                        span: full
+                        type: text          
+        relationsManager:
+                span: full
+                cssClass: ''
+                path: $/nocio/formstore/controllers/forms/_field_relations.htm
+                type: partial
+                tab: Relations

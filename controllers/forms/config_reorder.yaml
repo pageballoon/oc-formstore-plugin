@@ -1,0 +1,4 @@
+title: Forms
+modelClass: nocio\FormStore\Models\Form
+toolbar:
+    buttons: reorder_toolbar

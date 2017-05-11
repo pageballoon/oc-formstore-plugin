@@ -1,0 +1,100 @@
+<form>
+    {% set writable = __SELF__.submission.isWritable() %}
+    
+    {% if writable and __SELF__.property('save_warning') %}
+        <div class="callout fade in callout-warning">
+            <button
+                type="button"
+                class="close"
+                data-dismiss="callout"
+                aria-hidden="true">&times;</button>
+            <div class="header">
+                <i class="icon-info"></i>
+                <h3>Make sure to save your content regularly</h3>
+            </div>
+            <div class="content">
+                <p>
+                    You don't have to complete the form just yet. Save your content regularly while working on it.
+                    For convenience, you may use the keyboard shortcut <em>Ctrl+S</em>.
+                </p>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="fs-nav">
+        <div class="control-toolbar">
+            <div class="toolbar-item toolbar-primary">
+                <div data-control="toolbar">
+                    <div id="fs-saving-loader" style="float:left; display:none;" class="loading-indicator-container">
+                        <div class="loading-indicator size-small">
+                            <span></span>
+                            <div>Saving ...</div>
+                        </div>
+                    </div>
+                    
+                    {% if writable %}
+                    <button type="button" 
+                            class="btn btn-default oc-icon-reply"
+                            data-request-data="close: 1"
+                            data-request-loading="#fs-saving-loader"
+                            data-request="{{ __SELF__ }}::onSave">
+                        Save & Close
+                    </button>
+
+                    <button class="btn btn-default btn-success oc-icon-floppy-o"
+                           data-request="{{ __SELF__ }}::onSave"
+                           data-request-loading="#fs-saving-loader"
+                           data-hotkey="ctrl+s, cmd+s">
+                       Save
+                    </button>
+                    {% endif %}
+                    
+                    <button class="btn btn-default btn-danger oc-icon-times"
+                           data-request="{{ __SELF__ }}::onCloseForm"
+                           {% if writable %}
+                           data-request-confirm="Unsaved changes will be lost. Are you sure?"
+                           {% endif %}
+                           >
+                       Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <input type="hidden" name="submission" value="{{ __SELF__.submission.id }}" />
+    
+    {% if __SELF__.relation is defined %}
+        <input type="hidden" name="relation" value="{{ __SELF__.relation.id }}" />
+        <input type="hidden" name="data_id" value="{{ data_id }}" />
+    {% endif %}
+    
+    {{ form | raw }}
+    
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // grab the initial top offset of the navigation
+        var stickyNavTop = $('.fs-nav').offset().top;
+
+        // our function that decides weather the navigation bar should have "fixed" css position or not.
+        var stickyNav = function() {
+            var scrollTop = $(window).scrollTop(); // our current vertical position from the top
+
+            // if we've scrolled more than the navigation, change its position to fixed to stick to top,
+            // otherwise change it back to relative
+            if (scrollTop > stickyNavTop) {
+                $('.fs-nav').addClass('sticky');
+            } else {
+                $('.fs-nav').removeClass('sticky');
+            }
+        };
+
+        stickyNav();
+        // and run it again every time you scroll
+        $(window).scroll(function() {
+            stickyNav();
+        });
+    });
+</script>

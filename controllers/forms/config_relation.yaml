@@ -1,0 +1,8 @@
+rels:
+    label: Relations
+    view:
+        list: $/nocio/formstore/models/relation/columns.yaml
+        toolbarButtons: create|delete
+    manage:
+        list: $/nocio/formstore/models/relation/columns.yaml
+        form: $/nocio/formstore/models/relation/fields.yaml

@@ -1,0 +1,20 @@
+columns:
+    target_id:
+        label: Form
+        type: text
+        sortable: true
+        select: title
+        relation: target
+    field:
+        label: Field
+        type: text
+        searchable: true
+        sortable: true
+    title:
+        label: Title
+        type: text
+        searchable: true
+        sortable: true
+    foreign_title:
+        label: 'Foreign title'
+        type: text

@@ -1,0 +1,73 @@
+{% if submission is not defined %}
+    {% set submission = __SELF__.submission %}
+{% endif %}
+{% if relation is not defined %}
+    {% set relation = __SELF__.relation %}
+{% endif %}
+
+{% set rows = submission.getDataField(relation.field).get() %}
+{% set writable = submission.writable() %}
+
+<table style="margin:10px; width: 95%;">
+    <tr>
+        <td style="width: 70%;">
+            <b>{{ relation.title }} ({{ rows | length }})</b>
+        </td>
+        <td style="text-align: center;" colspan="2">
+            {% if writable %}
+            <a href="javascript:;"
+                data-request="{{ __SELF__ }}::onCreateRelated"
+                data-request-data="relation: {{ relation.id }}, submission: {{ submission.id }}"
+                >
+                    <i class="icon-plus-circle"></i> Add
+            </a>
+            {% endif %}
+        </td> 
+    </tr>
+
+{% for row in rows %}
+    <tr>
+        <td style="width: 70%;">
+            #{{ row.id }}
+            {% if row.name is defined %}
+                {{ row.name }}
+            {% elseif row.title is defined %}
+                {{ row.title }}
+            {% endif %}
+            
+            {% set relation_errors = relation.target.getErrors(row.toArray()) %}
+            {% if relation_errors | length > 0 %}
+                <ul>
+                    {% for e in relation_errors %}
+                    <li>{{ e }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
+            
+        </td>
+        <td style="text-align: center;">
+            <a href="javascript:;"
+                data-request="{{ __SELF__ }}::onEditRelated"
+                data-request-data="relation: {{ relation.id }}, submission: {{ submission.id }}, data_id: {{ row.id }}"
+                class="">
+                {% if writable %}
+                <i class="icon-pencil"></i> Edit
+                {% else %}
+                <i class="icon-eye"></i> View
+                {% endif %}
+            </a>
+        </td>
+        <td style="text-align: center;">
+            {% if writable %}
+            <a href="javascript:;"
+                data-request="{{ __SELF__ }}::onRemoveRelated"
+                data-request-data="relation: {{ relation.id }}, submission: {{ submission.id }}, data_id: {{ row.id }}"
+                class="">
+                <i class="icon-trash"></i> Remove
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+</table>
