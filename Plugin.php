@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore;
+<?php namespace Nocio\FormStore;
 
 use System\Classes\PluginBase;
 
@@ -16,8 +16,8 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'nocio\FormStore\Components\Manager' => 'formstoreManager',
-            'nocio\FormStore\Components\Countdown' => 'formstoreCountdown'
+            'Nocio\FormStore\Components\Manager' => 'formstoreManager',
+            'Nocio\FormStore\Components\Countdown' => 'formstoreCountdown'
         ];
     }
     
@@ -47,7 +47,7 @@ class Plugin extends PluginBase
             ],
             
             // Register frontend fileupload
-            'nocio\FormStore\Widgets\FrontendFileUpload' => [
+            'Nocio\FormStore\Widgets\FrontendFileUpload' => [
                 'label' => 'FrontendFileUpload',
                 'code'  => 'frontendfileupload'
             ],

@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Models;
+<?php namespace Nocio\FormStore\Models;
 
 use Model;
 use Validator;
@@ -33,8 +33,8 @@ class Form extends Model
     public $table = 'nocio_formstore_forms';
     
     public $hasMany = [
-        'submissions' => 'nocio\FormStore\Models\Submission',
-        'rels' => 'nocio\FormStore\Models\Relation'
+        'submissions' => 'Nocio\FormStore\Models\Submission',
+        'rels' => 'Nocio\FormStore\Models\Relation'
     ];
     
     /**

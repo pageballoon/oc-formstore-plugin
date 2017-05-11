@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Updates;
+<?php namespace Nocio\FormStore\Updates;
 
 use Schema;
 use October\Rain\Database\Updates\Migration;

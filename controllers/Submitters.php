@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Controllers;
+<?php namespace Nocio\FormStore\Controllers;
 
 use Backend\Classes\Controller;
 use BackendMenu;

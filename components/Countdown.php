@@ -1,7 +1,7 @@
-<?php namespace nocio\FormStore\Components;
+<?php namespace Nocio\FormStore\Components;
 
 use Cms\Classes\ComponentBase;
-use nocio\FormStore\Models\Form;
+use Nocio\FormStore\Models\Form;
 use Carbon\Carbon;
 
 class Countdown extends ComponentBase  {

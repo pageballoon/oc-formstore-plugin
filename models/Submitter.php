@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Models;
+<?php namespace Nocio\FormStore\Models;
 
 use Model;
 use Hash;
@@ -24,7 +24,7 @@ class Submitter extends Model
     ];
     
     public $hasMany = [
-        'submissions' => 'nocio\FormStore\Models\Submission'
+        'submissions' => 'Nocio\FormStore\Models\Submission'
     ];
     
     public $fillable = [

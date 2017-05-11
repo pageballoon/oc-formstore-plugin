@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Traits;
+<?php namespace Nocio\FormStore\Traits;
 
 use Input;
 use Request;

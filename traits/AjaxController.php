@@ -1,11 +1,11 @@
-<?php namespace nocio\FormStore\Traits;
+<?php namespace Nocio\FormStore\Traits;
 
 use Input;
 use Validator;
 use Mail;
-use nocio\FormStore\Models\Submission;
-use nocio\FormStore\Models\Form;
-use nocio\FormStore\Models\Submitter;
+use Nocio\FormStore\Models\Submission;
+use Nocio\FormStore\Models\Form;
+use Nocio\FormStore\Models\Submitter;
 use Response;
 use Cookie;
 use Redirect;

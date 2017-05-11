@@ -1,5 +1,5 @@
 list: $/nocio/formstore/models/form/columns.yaml
-modelClass: nocio\FormStore\Models\Form
+modelClass: Nocio\FormStore\Models\Form
 title: Forms
 noRecordsMessage: 'backend::lang.list.no_records'
 showSetup: true

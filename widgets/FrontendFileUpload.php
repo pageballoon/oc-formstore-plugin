@@ -1,7 +1,7 @@
-<?php namespace nocio\FormStore\Widgets;
+<?php namespace Nocio\FormStore\Widgets;
 
 use Backend\Classes\FormWidgetBase;
-use nocio\FormStore\Traits\ManagesUploads;
+use Nocio\FormStore\Traits\ManagesUploads;
 
 use October\Rain\Html\Helper as HtmlHelper;
 

@@ -1,5 +1,5 @@
 list: $/nocio/formstore/models/submission/columns.yaml
-modelClass: nocio\FormStore\Models\Submission
+modelClass: Nocio\FormStore\Models\Submission
 title: Submissions
 noRecordsMessage: 'backend::lang.list.no_records'
 showSetup: true

@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Models;
+<?php namespace Nocio\FormStore\Models;
 
 use Model;
 
@@ -22,8 +22,8 @@ class Relation extends Model
     ];
     
     public $belongsTo = [
-        'form' => 'nocio\FormStore\Models\Form', // inverse of Form::relations()
-        'target' => 'nocio\FormStore\Models\Form'
+        'form' => 'Nocio\FormStore\Models\Form', // inverse of Form::relations()
+        'target' => 'Nocio\FormStore\Models\Form'
     ];
 
     /**

@@ -1,4 +1,4 @@
-<?php namespace nocio\FormStore\Models;
+<?php namespace Nocio\FormStore\Models;
 
 use Model;
 use Event;
@@ -28,8 +28,8 @@ class Submission extends Model
     public $table = 'nocio_formstore_submissions';
 
     public $belongsTo = [
-      'form' => 'nocio\FormStore\Models\Form',
-      'submitter' => 'nocio\FormStore\Models\Submitter'
+      'form' => 'Nocio\FormStore\Models\Form',
+      'submitter' => 'Nocio\FormStore\Models\Submitter'
     ];
 
     public $morphTo = [

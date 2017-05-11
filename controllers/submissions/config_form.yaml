@@ -1,6 +1,6 @@
 name: Submissions
 form: $/nocio/formstore/models/submission/fields.yaml
-modelClass: nocio\FormStore\Models\Submission
+modelClass: Nocio\FormStore\Models\Submission
 defaultRedirect: nocio/formstore/submissions
 create:
     redirect: 'nocio/formstore/submissions/update/:id'

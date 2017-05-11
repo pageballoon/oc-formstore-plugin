@@ -1,10 +1,10 @@
-<?php namespace nocio\FormStore\Components;
+<?php namespace Nocio\FormStore\Components;
 
 use Cms\Classes\ComponentBase;
-use nocio\FormStore\Models\Form;
-use nocio\FormStore\Models\Submitter;
-use nocio\FormStore\Traits\ManagesUploads;
-use nocio\FormStore\Traits\AjaxController;
+use Nocio\FormStore\Models\Form;
+use Nocio\FormStore\Models\Submitter;
+use Nocio\FormStore\Traits\ManagesUploads;
+use Nocio\FormStore\Traits\AjaxController;
 use Input;
 use Cookie;
 use Redirect;
