@@ -1,8 +1,0 @@
-# ===================================
-#  Relation Behavior Config
-# ===================================
-
-data:
-    label: Data
-    view:
-        form: $/nocio/formstore/models/datasuednord/fields.yaml

@@ -9,6 +9,7 @@ use Nocio\FormStore\Models\Submitter;
 use Response;
 use Cookie;
 use Redirect;
+use Backend\Classes\WidgetManager;
 
 trait AjaxController {
     
@@ -89,6 +90,35 @@ trait AjaxController {
         return $this->refreshForm($form);
     }
     
+    /**
+     * Registers backend widgets for frontend use
+     */
+    public function loadBackendFormWidgets() {
+        $widgets = [
+            'Backend\FormWidgets\DatePicker' => [
+                'label' => 'Date picker',
+                'code'  => 'datepicker'
+            ],
+            'Backend\FormWidgets\RichEditor' => [
+                'label' => 'Rich editor',
+                'code'  => 'richeditor'
+            ],
+            'Backend\FormWidgets\MarkdownEditor' => [
+                'label' => 'MarkdownEditor',
+                'code'  => 'markdowneditor'
+            ],
+            // Custom file upload for frontend use
+            'Nocio\FormStore\Widgets\FrontendFileUpload' => [
+                'label' => 'FileUpload',
+                'code'  => 'fileupload'
+            ],
+        ];
+        
+        foreach ($widgets as $className => $widgetInfo) {
+            WidgetManager::instance()->registerFormWidget($className, $widgetInfo);
+        }
+    }
+    
     public function editor($form, $model) {
         $config = $this->makeConfig($form->getFieldsConfig());
         $config->arrayName = 'data';
@@ -96,12 +126,8 @@ trait AjaxController {
         $config->model = $model;
         
         $formWidget = new \Backend\Widgets\Form($this, $config);
-        // Replace any fileupload widget with the frontend fileupload widget
-        foreach($formWidget->fields as $key => $field) {
-            if ($field['type'] == 'fileupload') {
-                $formWidget->fields[$key]['type'] = 'frontendfileupload';
-            }
-        }
+        
+        $this->loadBackendFormWidgets();
         
         $html = $formWidget->render(['preview' => ! $this->submission->isWritable()]);
         

@@ -40,16 +40,37 @@ class Submission extends Model
      * Status codes
      * @var int
      */
-    protected $STATUS_NONE = 0;
-    protected $STATUS_CANCELLED = 1;
-    protected $STATUS_SUBMITTED = 2;
+    protected $STATE_NONE = 0;
+    protected $STATE_CANCELLED = 1;
+    protected $STATE_SUBMITTED = 2;
+    protected $STATUS_NONE = 'Draft';
+    protected $STATUS_CANCELLED = 'Cancelled';
+    protected $STATUS_SUBMITTED = 'Submitted';
 
+    
+    public function getStatusAttribute($attribute) {
+        switch($attribute) {
+            case $this->STATE_NONE: return $this->STATUS_NONE;
+            case $this->STATE_CANCELLED: return $this->STATUS_CANCELLED;
+            case $this->STATE_SUBMITTED: return $this->STATUS_SUBMITTED;
+        }
+    }
+    
+    public function getFormIdOptions($value, $formData)
+    {
+        return Form::lists('title', 'id');
+    }
+    
+    public function getSubmitterIdOptions($value, $formData)
+    {
+        return Submitter::lists('email', 'id');
+    }
 
     /**
      * Determines whether submission is writable
      */
     public function isWritable() {
-        if ($this->status > 0) {
+        if (in_array($this->status, ['Submitted', 'Cancelled'])) {
             return false;
         }
         
@@ -108,7 +129,7 @@ class Submission extends Model
         $this->data()->delete();
         
         // Set to cancelled
-        $this->status = $this->STATUS_CANCELLED;
+        $this->status = $this->STATE_CANCELLED;
         $this->treated = date('Y-m-d H:i:s');
         $this->save();
         
@@ -129,7 +150,7 @@ class Submission extends Model
         
         Event::fire('nocio.formstore.submit', [$this]);
         
-        $this->status = $this->STATUS_SUBMITTED;
+        $this->status = $this->STATE_SUBMITTED;
         $this->treated = date('Y-m-d H:i:s');
         $this->save();
         
@@ -164,7 +185,7 @@ class Submission extends Model
      * @return type
      */
     public function getErrors($deep = true) {
-        if ($this->status != 0) {
+        if ($this->status != $this->STATUS_NONE) {
             return [];
         }
         

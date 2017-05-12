@@ -35,12 +35,15 @@
     {% endif %}
 
     {% for submission in submissions %}
+    
+        {% if not (submission.status != submission.STATUS_CANCELLED and not submission.data.first()) %}
+    
         <table class="table data">
             <thead>
                 {% set errors = submission.getErrors() %}
                 <tr>
                     <td>
-                        {% if submission.status != 1 %}
+                        {% if submission.status != submission.STATUS_CANCELLED %}
                             <a href="javascript:;" 
                                data-request="{{ __SELF__ }}::onEdit"
                                data-request-data="submission: {{ submission.id }}">
@@ -49,18 +52,18 @@
                             {{ submission.title(' | ') }}
                             Started {{ submission.created_at.diffForHumans() }}
                         </span>
-                        {% if submission.status != 1 %}
+                        {% if submission.status != submission.STATUS_CANCELLED %}
                             </a>
                         {% endif %}
                     </td>
                     <td style="width: 150px;">
                         <span>
-                        {% if submission.status == 2 %}
+                        {% if submission.status == submission.STATUS_SUBMITTED %}
                             <span class="list-badge badge-success">
                                 <i class="icon-check"></i>
                             </span>
                             Submitted
-                        {% elseif submission.status == 1 %}
+                        {% elseif submission.status == submission.STATUS_CANCELLED %}
                             <span class="list-badge badge-danger">
                                 <i class="icon-times"></i>
                             </span>
@@ -141,7 +144,7 @@
                     </td>
                 </tr>
             </tbody>
-            {% elseif submission.status != 1 %}
+            {% elseif submission.status != submission.STATUS_CANCELLED %}
             <tbody>
                 <tr>
                     <td colspan="100">
@@ -171,5 +174,8 @@
             </tbody>
             {% endif %}
         </table>
+
+        {% endif %}
+        
     {% endfor %}
 </div>

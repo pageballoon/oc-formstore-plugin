@@ -14,6 +14,6 @@ class Submitters extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('nocio.FormStore', 'main-menu-item', 'submitter-menu-item');
+        BackendMenu::setContext('Nocio.FormStore', 'main-menu-item', 'submitter-menu-item');
     }
 }

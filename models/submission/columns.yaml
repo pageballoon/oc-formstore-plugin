@@ -1,17 +1,22 @@
 columns:
+    id: 
+        label: ID
+        type: number
+        invisible: true
     form_id:
         label: Form
         type: text
         sortable: true
         select: title
         relation: form
-    submitted:
-        label: Submitted
-        type: datetime
-        sortable: true
+    status:
+        label: Status
     submitter_id:
         label: Submitter
         type: text
         sortable: true
         select: email
         relation: submitter
+    created_at:
+        label: Created
+        type: date

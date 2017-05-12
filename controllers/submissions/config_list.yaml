@@ -2,10 +2,11 @@ list: $/nocio/formstore/models/submission/columns.yaml
 modelClass: Nocio\FormStore\Models\Submission
 title: Submissions
 noRecordsMessage: 'backend::lang.list.no_records'
+recordsPerPage: '8'
 showSetup: true
 showCheckboxes: true
 toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
-recordUrl: 'nocio/formstore/submissions/update/:id'
+recordUrl: 'nocio/formstore/submissions/preview/:id'

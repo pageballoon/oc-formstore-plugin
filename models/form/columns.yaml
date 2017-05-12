@@ -1,6 +1,13 @@
 columns:
-    key:
-        label: Key
+    id:
+        label: ID
+        type: number
+        invisible: true
+    model:
+        label: Model
+        type: text
+    fields_config:
+        label: Field configuration
         type: text
         invisible: true
     title:
@@ -18,3 +25,8 @@ columns:
         label: 'Use TaC'
         type: switch
         sortable: true
+    max_per_user:
+        label: 'User maximum'
+        type: number
+        sortable: true
+        invisible: true

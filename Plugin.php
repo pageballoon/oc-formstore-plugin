@@ -5,14 +5,24 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
 
+    /**
+     * Component details
+     * @return array
+     */
     public function componentDetails()
     {
         return [
-            'name'        => 'Submission',
-            'description' => 'Manages submissions'
+            'name'        => 'nocio.formstore::lang.plugin.name',
+            'description' => 'nocio.formstore::lang.plugin.description',
+            'icon' => 'icon-paperclip',
+            'iconSvg' => 'assets\images\logo.svg'
         ];
     }
     
+    /**
+     * Registers components
+     * @return array
+     */
     public function registerComponents()
     {
         return [
@@ -21,36 +31,14 @@ class Plugin extends PluginBase
         ];
     }
     
+    /**
+     * Registers mail templates
+     * @return array
+     */
     public function registerMailTemplates()
     {
         return [
             'nocio.formstore::mail.login' => 'FormStore Manager login mail'
-        ];
-    }
-    
-    public function registerFormWidgets()
-    {
-        return [
-            
-            // @todo: remove this workaround of registering widgets
-            'Backend\FormWidgets\DatePicker' => [
-                'label' => 'Date picker',
-                'code'  => 'datepicker'
-            ],
-            'Backend\FormWidgets\RichEditor' => [
-                'label' => 'Rich editor',
-                'code'  => 'richeditor'
-            ],
-            'Backend\FormWidgets\MarkdownEditor' => [
-                'label' => 'MarkdownEditor',
-                'code'  => 'markdowneditor'
-            ],
-            
-            // Register frontend fileupload
-            'Nocio\FormStore\Widgets\FrontendFileUpload' => [
-                'label' => 'FrontendFileUpload',
-                'code'  => 'frontendfileupload'
-            ],
         ];
     }
 }

@@ -3,6 +3,7 @@ modelClass: Nocio\FormStore\Models\Form
 title: Forms
 noRecordsMessage: 'backend::lang.list.no_records'
 showSetup: true
+recordsPerPage: '8'
 showCheckboxes: true
 toolbar:
     buttons: list_toolbar

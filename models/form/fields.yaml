@@ -16,7 +16,7 @@ fields:
         span: full
         default: fields.yaml
         type: text
-        commentAbove: 'The path to the fields YAML config file.'
+        commentAbove: 'Relative or absolute path to the fields YAML config file e.g. formstore_fields.yaml or $\Rainlab\Blog\Models\Post\fields.yaml'
 tabs:
     fields:
         max_per_user:

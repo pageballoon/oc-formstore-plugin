@@ -1,16 +1,18 @@
 fields:
     form_id:
         label: Form
-        oc.commentPosition: ''
-        nameFrom: name
-        descriptionFrom: description
         span: full
         context:
             - preview
-        type: relation
-    submitted:
-        label: Submitted
-        span: full
-        oc.commentPosition: ''
-        mode: datetime
-        type: datepicker
+        type: dropdown
+    status:
+        label: Status
+        type: text
+        context:
+            - preview
+    submitter_id:
+        label: Submitter
+        type: dropdown
+        context:
+            - preview
+    

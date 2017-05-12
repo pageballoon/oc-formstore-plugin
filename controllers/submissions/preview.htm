@@ -1,7 +1,7 @@
 <?php Block::put('breadcrumb') ?>
     <ul>
         <li><a href="<?= Backend::url('nocio/formstore/submissions') ?>">Submissions</a></li>
-        <li><?= e($this->pageTitle) ?></li>
+        <li>View Submission</li>
     </ul>
 <?php Block::endPut() ?>
 
@@ -9,8 +9,13 @@
 
     <div class="form-preview">
         <?= $this->formRenderPreview() ?>
+        
+        <h3>Data</h3>
+        <hr />
+        
+        <?= $this->renderDataPreview() ?>
 
-        <?= $this->relationRender('data', ['readOnly' => true]) ?>
+        <?= $this->renderRelationsPreview() ?>
     </div>
 
 <?php else: ?>

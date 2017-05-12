@@ -2,9 +2,5 @@ name: Submissions
 form: $/nocio/formstore/models/submission/fields.yaml
 modelClass: Nocio\FormStore\Models\Submission
 defaultRedirect: nocio/formstore/submissions
-create:
-    redirect: 'nocio/formstore/submissions/update/:id'
-    redirectClose: nocio/formstore/submissions
-update:
-    redirect: nocio/formstore/submissions
-    redirectClose: nocio/formstore/submissions
+preview:
+    title: View Blog Post

@@ -4,6 +4,7 @@ title: Submitters
 noRecordsMessage: 'backend::lang.list.no_records'
 showSetup: true
 showCheckboxes: true
+recordsPerPage: '8'
 toolbar:
     buttons: list_toolbar
     search:

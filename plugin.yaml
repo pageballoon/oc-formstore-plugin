@@ -2,7 +2,6 @@ plugin:
     name: 'nocio.formstore::lang.plugin.name'
     description: 'nocio.formstore::lang.plugin.description'
     author: 'Frithjof Gressmann'
-    icon: oc-icon-database
     homepage: 'http://www.noc.io'
 permissions:
     nocio.formstore.manage_forms:
@@ -16,10 +15,10 @@ permissions:
         label: 'Manage submissions'
 navigation:
     main-menu-item:
-        label: Forms
+        label: Stored forms
         url: nocio/formstore/forms
         icon: icon-paperclip
-        order: ''
+        iconSvg: 'plugins/nocio/formstore/assets/img/icon.svg'
         sideMenu:
             forms-menu-item:
                 label: Forms
