@@ -4,7 +4,6 @@ use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
-
     /**
      * Component details
      * @return array
@@ -14,8 +13,9 @@ class Plugin extends PluginBase
         return [
             'name'        => 'nocio.formstore::lang.plugin.name',
             'description' => 'nocio.formstore::lang.plugin.description',
-            'icon' => 'icon-paperclip',
-            'iconSvg' => 'assets\images\logo.svg'
+            'icon'        => 'icon-paperclip',
+            'iconSvg'     => 'assets\images\logo.svg',
+            'homepage'    => 'https://github.com/nocio/oc-formstore-plugin'
         ];
     }
     
@@ -26,7 +26,7 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'Nocio\FormStore\Components\Manager' => 'formstoreManager',
+            'Nocio\FormStore\Components\Manager'   => 'formstoreManager',
             'Nocio\FormStore\Components\Countdown' => 'formstoreCountdown'
         ];
     }
