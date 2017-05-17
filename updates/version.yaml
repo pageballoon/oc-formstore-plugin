@@ -12,3 +12,4 @@
 1.0.5:
     - 'Created table nocio_formstore_relations'
     - builder_table_create_nocio_formstore_relations.php
+1.0.6: Fix incorrect redirection of login email validation
