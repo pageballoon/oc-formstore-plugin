@@ -25,8 +25,7 @@ trait AjaxController {
 
         $validator = Validator::make(Input::all(), ['email' => 'required|email']);
         if ($validator->fails()) {
-            // @todo: make dynamic url
-            return Redirect::to('/contribute/article')->withErrors($validator);
+            return Redirect::to($this->currentPageUrl())->withErrors($validator);
         }
         
         $submitter = Submitter::firstOrNew(['email' => Input::get('email')]);
