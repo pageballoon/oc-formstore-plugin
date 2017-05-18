@@ -68,5 +68,13 @@ class Form extends Model
         
         return $this->fields_config;
     }
+
+    public function submittedMaximum($submitter) {
+        if ($this->max_per_user == -1) {
+            return false;
+        }
+
+        return $submitter->submissions()->byForm($this)->active()->count() >= $this->max_per_user;
+    }
     
 }

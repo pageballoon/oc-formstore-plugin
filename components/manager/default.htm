@@ -1,11 +1,19 @@
-{{ form_ajax('onLogin') }}
+{% if not __SELF__.authenticated %}
 
-<div id="fs-login-form">
-    {{ errors.first('email') }}<br />
-    
-    <input class="form-control" placeholder="Your email goes here" type="text" name="email" />
+    {{ form_ajax('onLogin') }}
 
-    <button type="submit" class="btn">Send me a link to proceed</button>
-</div>
+    <div id="fs-login-form">
+        {{ errors.first('email') }}<br />
 
-{{ form_close() }}
+        <input class="form-control" placeholder="Your email goes here" type="text" name="email" />
+
+        <button type="submit" class="btn">Send me a link to proceed</button>
+    </div>
+
+    {{ form_close() }}
+
+{% else %}
+
+    {{ __SELF__.app | raw }}
+
+{% endif %}

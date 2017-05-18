@@ -13,3 +13,5 @@
     - 'Created table nocio_formstore_relations'
     - builder_table_create_nocio_formstore_relations.php
 1.0.6: Fix incorrect redirection of login email validation
+1.1.0: !!! New embedding option might require adjustments of the manager component markup. Refer to the upgrade guide for more information.
+1.1.1: New option to restrict submission to existing submitters only

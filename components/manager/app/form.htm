@@ -11,7 +11,7 @@
             Submissions closed {{ form.closes_at.diffForHumans() }}.
         </p>
     {% else %}
-        {% if not __SELF__.submitter.submittedMaximum(form)  %}
+        {% if not form.submittedMaximum(__SELF__.submitter)  %}
             <div class="control-toolbar">
                 <div class="toolbar-item toolbar-primary">
                     <div data-control="toolbar">

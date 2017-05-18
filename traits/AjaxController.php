@@ -5,7 +5,6 @@ use Validator;
 use Mail;
 use Nocio\FormStore\Models\Submission;
 use Nocio\FormStore\Models\Form;
-use Nocio\FormStore\Models\Submitter;
 use Response;
 use Cookie;
 use Redirect;
@@ -16,61 +15,35 @@ trait AjaxController {
     use \System\Traits\ConfigMaker;
     
     public $widget;
-    
+
     /**
-     * Sends an authentication email to the user
-     * @return October AJAX response
+     * Auth middleware
      */
-    public function onLogin() {
+    public function middleware() {
 
-        $validator = Validator::make(Input::all(), ['email' => 'required|email']);
-        if ($validator->fails()) {
-            return Redirect::to($this->currentPageUrl())->withErrors($validator);
+        if ( ! $this->authenticate() ) {
+            return 'Not authorized';
         }
-        
-        $submitter = Submitter::firstOrNew(['email' => Input::get('email')]);
-        
-        // First-time generation?
-        $renew = ! isset($submitter->id);
 
-        // Generate a new token
-        $identifier = $submitter->generateIdentifier();
-        $token = $submitter->generateToken();
-        $submitter->save();
-        
-        Mail::sendTo(
-            $submitter->email,
-            $this->property('login_mail_template'),
-            ['token' => $token, 'identifier' => $identifier, 
-                'base_url' => $this->currentPageUrl(), 'renew' => $renew ]
-        );
-        
-        return [
-            '#fs-login-form' => $this->renderPartial('@authenticate/success', 
-                    ['base_url' => $this->currentPageUrl()])
-        ];
     }
-    
-    /** 
-     * Signs out
-     */
-    public function onSignout() {
-        Cookie::queue(Cookie::forget('formstore_identifier'));
-        Cookie::queue(Cookie::forget('formstore_token'));
-    }
+
     
     /** 
      * Creates a new form submission
      * @return boolean
      */
     public function onCreate() {
+
+        if ($response = $this->middleware()) {
+            return $response;
+        }
         
         if ( ! in_array($form_id = Input::get('form'), $this->property('forms'))
                 || ! $form = Form::find($form_id)) {
             return false;
         }
         
-        if ($this->submitter->submittedMaximum($form)) {
+        if ($form->submittedMaximum($this->submitter)) {
             return false;
         }
         
@@ -140,7 +113,11 @@ trait AjaxController {
      * Edits a submission
      * @return type
      */
-    public function onEdit() {   
+    public function onEdit() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         return $this->editor($this->submission->form, $this->submission->data);
     }
     
@@ -149,6 +126,10 @@ trait AjaxController {
      * @return boolean
      */
     public function onEditRelated() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         if (! $model = $this->submission->getDataField($this->relation->field)->find(Input('data_id'))) {
            return false; 
         }
@@ -157,6 +138,10 @@ trait AjaxController {
     }
     
     public function onSave() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         if (! $this->submission->isWritable()) {
             return;
         }
@@ -175,7 +160,7 @@ trait AjaxController {
         if (! $model->update($data)) {
             return false; // @todo: error handling
         }
-        
+
         if (Input::get('close')) {
             return $this->onCloseForm();
         }
@@ -185,7 +170,11 @@ trait AjaxController {
      * Cancels the submission
      */
     public function onCancelSubmission() {
-        $this->submission->withdraw();
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
+        $this->submission->withdraw($this->alias);
         return $this->refreshForm();
     }
     
@@ -193,7 +182,11 @@ trait AjaxController {
      * Submits the submission
      */
     public function onSubmitSubmission() {
-        if ($this->submission->submit()) {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
+        if ($this->submission->submit($this->alias)) {
             return $this->refreshForm();  
         }
     }
@@ -203,13 +196,21 @@ trait AjaxController {
      * @return type
      */
     public function onCloseForm() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         return [
-            '#app' => $this->renderPartial('@app/forms')
+            '#app' => $this->renderPartial('@app/index')
         ];
     }
     
 
     public function onRemoveRelated() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         if (! $this->submission->isWritable()) {
             return;
         }
@@ -224,6 +225,10 @@ trait AjaxController {
     }
     
     public function onCreateRelated() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         if (! $this->submission->isWritable()) {
             return;
         }
@@ -249,6 +254,10 @@ trait AjaxController {
      * @return type
      */
     public function refreshRelation() {
+        if ($response = $this->middleware()) {
+            return $response;
+        }
+
         return [
             "#fs-form-{$this->submission->id}-relation-{$this->relation->id}" =>
             $this->renderPartial('@app/relation')

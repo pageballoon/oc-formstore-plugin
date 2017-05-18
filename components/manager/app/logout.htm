@@ -1,0 +1,9 @@
+<i class="icon-street-view"></i> {{ __SELF__.submitter.email }} &nbsp;&nbsp;
+
+<button type="button"
+        class="btn btn-danger oc-icon-power-off"
+        data-request="{{ __SELF__ }}::onLogout"
+        data-request-success="window.location = window.location.href.split('?')[0];"
+        data-request-confirm="Are you sure?">
+    Sign out
+</button>

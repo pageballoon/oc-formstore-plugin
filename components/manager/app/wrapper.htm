@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>{{ this.page.title }}</title>
+
+    <meta name="description" content="{{ this.page.meta_description }}">
+    <meta name="title" content="{{ this.page.meta_title }}">
+    <meta name="author" content="October CMS">
+
+    <link href="/plugins/nocio/formstore/assets/css/style.css" rel="stylesheet">
+
+    {% styles %}
+</head>
+
+<body>
+    <div class="fs-header">
+        
+        <div style="float:right;">
+            {% partial '@app/logout' %}
+        </div>
+
+    </div>
+    
+    <div class="fs-content">
+        {% partial '@app/index' %}
+    </div>
+
+    <script src="/modules/backend/assets/js/vendor/jquery.min.js"></script>
+    {% framework %}
+    {% scripts %}
+</body>
+</html>

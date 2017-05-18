@@ -9,6 +9,10 @@ use Input;
 use Cookie;
 use Redirect;
 use Request;
+use Event;
+use Validator;
+use Mail;
+use Response;
 
 class Manager extends ComponentBase  {
     
@@ -46,13 +50,26 @@ class Manager extends ComponentBase  {
     public $model = null;
 
     /**
+     * Contains the rendered component
+     * @var string
+     */
+    public $app = null;
+
+    /**
      * Authenticates the submitter against the request
      */
     public function authenticate() {
+
+        /** Extensionality */
+        if ($auth = Event::fire('nocio.formstore.authenticate', [$this->alias], true)) {;
+            $this->submitter = $auth[0];
+            return $this->authenticated = $auth[1];
+        }
+
         $this->submitter = Submitter::byId(Cookie::get('formstore_identifier'))->first();
         
         if ($this->submitter) {
-            $this->authenticated = $this->submitter->authenticate(Cookie::get('formstore_token'));
+            $this->authenticated = $this->submitter->authenticated(Cookie::get('formstore_token'));
         }
         
         return $this->authenticated;
@@ -62,31 +79,24 @@ class Manager extends ComponentBase  {
      * Initialise plugin and parse request
      */
     public function init() {
-        
-        // Middleware
-        if ( ! $this->authenticate() ) {
-            
-            // Require authoritzation for AJAX request, except login
-            if (Request::ajax() && Request::header('X-OCTOBER-REQUEST-HANDLER') != 'onLogin') {
-                // Unauthenticated
-                throw new \Exception('Not authorized');
-            }
-            
-        }
 
-        // Request information
-        
-        if ($submission_id = Input::get('submission')) {
-            $this->submission = $this->submitter->submissions()->find($submission_id);
-            $this->model = $this->submission->data()->first();
-        }
-        
-        if ($relation_id = Input::get('relation')) {
-            $this->relation = $this->submission->form->rels()->find($relation_id);
-            
-            if ($data_id = Input::get('data_id')) {
-                $this->model = $this->submission->getDataField($this->relation->field)->find($data_id);
+        if ($this->authenticate()) {
+
+            // Parse request information
+
+            if ($submission_id = Input::get('submission')) {
+                $this->submission = $this->submitter->submissions()->find($submission_id);
+                $this->model = $this->submission->data()->first();
             }
+
+            if ($relation_id = Input::get('relation')) {
+                $this->relation = $this->submission->form->rels()->find($relation_id);
+
+                if ($data_id = Input::get('data_id')) {
+                    $this->model = $this->submission->getDataField($this->relation->field)->find($data_id);
+                }
+            }
+
         }
 
     }
@@ -116,6 +126,18 @@ class Manager extends ComponentBase  {
                 'type'              => 'set',
                 'items'             => Form::lists('title', 'id'),
                 'default'           => []
+            ],
+            'embedded' => [
+                'title' => 'Embed form',
+                'description' => 'If activated the manager will be embedded into the page rather than replacing it',
+                'type' => 'checkbox',
+                'default' => 0
+            ],
+            'open_for_registration' => [
+                'title' => 'Open for registration',
+                'description' => 'If disabled, only existing submitters can access the form',
+                'type' => 'checkbox',
+                'default' => 1
             ],
             'login_mail_template' => [
                 'title' => 'onLogin Mail template',
@@ -153,8 +175,8 @@ class Manager extends ComponentBase  {
         }
         
         // Check against submitter model, Cookie beats $_GET
-        if (! $this->submitter->authenticate(Cookie::get('formstore_token'))) {
-            if (! $this->submitter->authenticate(Input::get('token'))) {
+        if (! $this->submitter->authenticated(Cookie::get('formstore_token'))) {
+            if (! $this->submitter->authenticated(Input::get('token'))) {
                 return false;
             }
         }
@@ -173,13 +195,13 @@ class Manager extends ComponentBase  {
      * @return mixed
      */
     public function onRun() {
-        
+
         // Authenticate via token
         if (Input::get('id') || Input::get('token')) {
             $this->login();
             return Redirect::to($this->currentPageUrl());
         }
-        
+
         // Run application
         if ($this->authenticated) {
             
@@ -189,10 +211,75 @@ class Manager extends ComponentBase  {
             }
             
             // Render frontend
-            return $this->renderPartial('@app/main');
+            $this->addCss('/modules/system/assets/ui/storm.css');
+            $this->addCss('/plugins/nocio/formstore/assets/css/uploader.css');
+            $this->addJs('/modules/system/assets/ui/storm-min.js');
+            $this->addJs('/plugins/nocio/formstore/assets/vendor/dropzone/dropzone.js');
+            $this->addJs('/plugins/nocio/formstore/assets/js/uploader.js');
+
+            if ($this->property('embedded')) {
+                $this->app = $this->renderPartial('@app/index');
+            } else {
+                return $this->renderPartial('@app/wrapper');
+            }
+
         }
-        
-        // else: default login partial will be rendered
+    }
+
+    /**
+     * Sends an authentication email to the user
+     * @return October AJAX response
+     */
+    public function onLogin() {
+
+        // Validate the email
+        $validator = Validator::make(Input::all(), ['email' => 'required|email']);
+        if ($validator->fails()) {
+            return Redirect::to($this->currentPageUrl())->withErrors($validator);
+        }
+
+        // Find or create submitter
+        if ($this->property('open_for_registration')) {
+            $submitter = Submitter::firstOrNew(['email' => Input::get('email')]);
+        } else {
+            if (! $submitter = Submitter::where(['email' => Input::get('email')])->first()) {
+                return Response::json('Sorry, this email is not registered.', 403);
+            }
+        }
+
+        // First-time generation?
+        $renew = ! isset($submitter->id);
+
+        // Generate a new token
+        $identifier = $submitter->generateIdentifier();
+        $token = $submitter->generateToken();
+        $submitter->save();
+
+        Mail::sendTo(
+            $submitter->email,
+            $this->property('login_mail_template'),
+            ['token' => $token, 'identifier' => $identifier,
+                'base_url' => $this->currentPageUrl(), 'renew' => $renew ]
+        );
+
+        return [
+            '#fs-login-form' => $this->renderPartial('@authenticate/success',
+                ['base_url' => $this->currentPageUrl()])
+        ];
+    }
+
+    /**
+     * Signs out
+     */
+    public function onLogout() {
+
+        /** Extensionality */
+        if ($response = Event::fire('nocio.formstore.logout', [$this->alias], true)) {
+            return $response;
+        }
+
+        Cookie::queue(Cookie::forget('formstore_identifier'));
+        Cookie::queue(Cookie::forget('formstore_token'));
     }
     
 }

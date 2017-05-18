@@ -52,7 +52,7 @@ class Submitter extends Model
      * @param type $token
      * @return type
      */
-    public function authenticate($token) {
+    public function authenticated($token) {
         return Hash::check($token, $this->token);
     }
     
@@ -79,12 +79,5 @@ class Submitter extends Model
 
         return $token;
     }
-    
-    public function submittedMaximum($form) {
-        if ($form->max_per_user == -1) {
-            return false;
-        } 
-        
-        return $this->submissions()->byForm($form)->active()->count() >= $form->max_per_user;
-    }
+
 }

@@ -20,7 +20,7 @@ class BuilderTableCreateNocioFormstoreForms extends Migration
             $table->text('tac')->nullable();
             $table->dateTime('opens_at')->nullable();
             $table->dateTime('closes_at')->nullable();
-	    $table->integer('max_per_user')->default(-1);
+	        $table->integer('max_per_user')->default(-1);
         });
     }
     
