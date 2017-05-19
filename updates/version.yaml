@@ -15,3 +15,4 @@
 1.0.6: Fix incorrect redirection of login email validation
 1.1.0: !!! New embedding option might require adjustments of the manager component markup. Refer to the upgrade guide for more information.
 1.1.1: New option to restrict submission to existing submitters only
+1.1.2: Added not_authenticated event

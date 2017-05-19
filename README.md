@@ -143,7 +143,7 @@ Next, we have to override the authentication methods, that return the current su
         }
     });
 
-Finally, we can adjust the logout function:
+Finally, it is possible to adjust the logout function ...
 
     /**
      * Log the user out
@@ -153,7 +153,13 @@ Finally, we can adjust the logout function:
         return true;
     });
 
-Note, that both events take the alias of the formManager component as a parameter, allowing you to override the authentication for specific manager instances.
+... and the behaviour when the authentication was unsuccessful, e.g. redirect the user to the login page:
+
+    Event::listen('nocio.formstore.not_authenticated', function($alias) {
+            return Redirect::to('/intranet');
+    });
+
+Note, that the events take the alias of the formManager component as a parameter, allowing you to override the authentication for specific manager instances.
 
 ### Support & Contribution
 

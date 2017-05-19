@@ -223,6 +223,11 @@ class Manager extends ComponentBase  {
                 return $this->renderPartial('@app/wrapper');
             }
 
+        } else {
+            /** Extensionality */
+            if ($response = Event::fire('nocio.formstore.not_authenticated', [$this->alias], true)) {;
+                return $response;
+            }
         }
     }
 
