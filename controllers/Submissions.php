@@ -62,4 +62,33 @@ class Submissions extends Controller
 
         return $html;
     }
+
+    public function exportMails()
+    {
+        $emails = [];
+
+        $lists = $this->makeLists();
+
+        $definition = true;
+        $widget = isset($lists[$definition])
+            ? $lists[$definition]
+            : reset($lists);
+
+        $model = $widget->prepareModel();
+        $results = $model->get();
+        foreach ($results as $result) {
+            $email = $result->submitter_id;
+            if (! in_array($email, $emails) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $emails[] = $email;
+            }
+        }
+
+        $result = implode(',', $emails);
+
+        header("Content-Type: text/plain");
+        header('Content-Disposition: attachment; filename="emails.txt"');
+        header("Content-Length: " . strlen($result));
+        echo $result;
+        exit;
+    }
 }

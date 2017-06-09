@@ -23,8 +23,9 @@ The manager supports opening and closing dates for forms. If activated, the user
 In future, the plugin might be extended to allow for
 
 - Developer API to render custom frontend forms
+- Upload improvements (e.g. file type validation)
 - link based access (like in Google Forms)
-- advanced submitter management (e.g. sending emails to all submitters)
+- advanced submitter management
 - general user experience improvements
 - ...
 
@@ -53,7 +54,8 @@ The component will display the email login form and -- if the user is logged in 
 The countdown provides information about the opening and closing time of a form. Its only property is the `form` and can be integrated into any CMS page. It provides the following information (accessible via ``__SELF__`` in the plugin markup):
 
 - `open` - whether the form is currently open for submissions
-- `opens` - distance to the form's opening time with `opens.days`, `opens.hours`, `opens.minutes`
+- `closed` - whether the closing date is past
+- `opens` - distance to the form's opening time with `opens.days`, `opens.hours`, `opens.minutes` and `opens.date` (Carbon instance)
 - `closes` - same as `opens` but for closing time
 - `liftoff` - contains the closing date if the form is open and the opening date otherwise
 
@@ -156,7 +158,7 @@ Finally, it is possible to adjust the logout function ...
 ... and the behaviour when the authentication was unsuccessful, e.g. redirect the user to the login page:
 
     Event::listen('nocio.formstore.not_authenticated', function($alias) {
-            return Redirect::to('/intranet');
+            return Redirect::to('/login');
     });
 
 Note, that the events take the alias of the formManager component as a parameter, allowing you to override the authentication for specific manager instances.

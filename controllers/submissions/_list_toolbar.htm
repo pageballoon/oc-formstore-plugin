@@ -14,4 +14,10 @@
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')) ?>
     </button>
+
+    <a href="<?= Backend::url('nocio/formstore/submissions/export-mails') ?>"
+       class="btn btn-default oc-icon-envelope"
+    >
+        Get emails from list (.txt)
+    </a>
 </div>

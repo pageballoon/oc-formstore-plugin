@@ -10,6 +10,7 @@ class Countdown extends ComponentBase  {
     public $closes;
     public $liftoff;
     public $open;
+    public $closed;
 
     public function componentDetails()
     {
@@ -45,7 +46,8 @@ class Countdown extends ComponentBase  {
             $result->days = $result->hours = $result->minutes = 0;
             return $result;
         }
-        
+
+        $result->date = $date;
         $result->days = $now->diffInDays($date);
         $now = $now->addDays($now->diffInDays($date, false));
         $result->hours = $now->diffInHours($date);
@@ -59,6 +61,7 @@ class Countdown extends ComponentBase  {
         $form = Form::find($this->property('form'));
 
         $this->open = $form->opens_at ? $form->opens_at->isPast() : false;
+        $this->closed = $form->closes_at ? $form->closes_at->isPast() : false;
 
         $this->opens = $this->distance($form->opens_at);
         $this->closes = $this->distance($form->closes_at);
