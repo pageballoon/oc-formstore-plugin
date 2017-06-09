@@ -75,6 +75,10 @@ trait AjaxController {
                 'label' => 'Rich editor',
                 'code'  => 'richeditor'
             ],
+            'Backend\FormWidgets\Relation' => [
+                'label' => 'Relation',
+                'code'  => 'relation'
+            ],
             'Backend\FormWidgets\MarkdownEditor' => [
                 'label' => 'MarkdownEditor',
                 'code'  => 'markdowneditor'

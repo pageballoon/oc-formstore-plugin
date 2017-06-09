@@ -18,3 +18,4 @@
 1.1.2: Added not_authenticated event
 1.1.3: Adding countdown.closed state
 1.1.4: Adding submitter email export
+1.1.5: Adding support for relation dropdown
