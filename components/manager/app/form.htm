@@ -18,6 +18,7 @@
                         <button class="btn btn-default btn-success"
                             data-request="{{ __SELF__ }}::onCreate"
                             data-request-data="form: {{ form.id }}"
+                            data-request-loading="#fs-loader-form-{{ form.id }}"
                             {% if form.tac_enabled %}
                             data-request-confirm="You agree to the stated terms & conditions"
                             {% endif %}>
@@ -34,7 +35,19 @@
 
     {% endif %}
 
+    <div id="fs-loader-form-{{ form.id }}" class="loading-indicator-container" style="display:none;">
+        <div class="loading-indicator indicator-center" style="background:none;">
+            <span></span>
+        </div>
+    </div>
+
     {% for submission in submissions %}
+
+        <div id="fs-loader-submission-{{ submission.id }}" class="loading-indicator-container" style="display:none;">
+            <div class="loading-indicator indicator-center" style="background:none;">
+                <span></span>
+            </div>
+        </div>
     
         {% if not (submission.status != submission.STATUS_CANCELLED and not submission.data.first()) %}
     
@@ -46,6 +59,7 @@
                         {% if submission.status != submission.STATUS_CANCELLED %}
                             <a href="javascript:;" 
                                data-request="{{ __SELF__ }}::onEdit"
+                               data-request-loading="#fs-loader-submission-{{ submission.id }}"
                                data-request-data="submission: {{ submission.id }}">
                         {% endif %}
                         <span>
@@ -92,6 +106,7 @@
                             data-request="{{ __SELF__ }}::onEdit"
                             data-request-data="submission: {{ submission.id }}"
                             style="float:right; margin-right: 30px;"
+                            data-request-loading="#fs-loader-submission-{{ submission.id }}"
                             class="btn btn-info btn-sm">
                             <i class="icon-pencil"></i>
                             Edit
@@ -129,6 +144,7 @@
                         <button class="btn btn-warning oc-icon-share"
                                 data-request="{{ __SELF__ }}::onSubmitSubmission"
                                 data-request-data="submission: {{ submission.id }}"
+                                data-request-loading="#fs-loader-submission-{{ submission.id }}"
                                 data-request-confirm="Are you sure?">
                             Submit
                         </button>
@@ -137,6 +153,7 @@
                         <button class="btn btn-default btn-danger oc-icon-trash"
                                 style="float: right;"
                                 data-request="{{ __SELF__ }}::onCancelSubmission"
+                                data-request-loading="#fs-loader-submission-{{ submission.id }}"
                                 data-request-data="submission: {{ submission.id }}"
                                 data-request-confirm="Are you sure?">
                             Cancel
@@ -152,6 +169,7 @@
                         <button
                             data-request="{{ __SELF__ }}::onEdit"
                             data-request-data="submission: {{ submission.id }}"
+                            data-request-loading="#fs-loader-submission-{{ submission.id }}"
                             style="float:right; margin-right: 30px;"
                             class="btn btn-info btn-sm">
                             <i class="icon-eye"></i>

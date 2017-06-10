@@ -25,10 +25,17 @@
         <div class="control-toolbar">
             <div class="toolbar-item toolbar-primary">
                 <div data-control="toolbar">
-                    <div id="fs-saving-loader" style="float:left; display:none;" class="loading-indicator-container">
-                        <div class="loading-indicator size-small">
+                    <div id="fs-saving-loader" style="float:left; display:none; width: 150px;" class="loading-indicator-container">
+                        <div class="loading-indicator size-small" style="background:none;">
                             <span></span>
                             <div>Saving ...</div>
+                        </div>
+                    </div>
+
+                    <div id="fs-closing-loader" style="float:left; display:none; width: 150px;" class="loading-indicator-container">
+                        <div class="loading-indicator size-small" style="background:none;">
+                            <span></span>
+                            <div>Closing ...</div>
                         </div>
                     </div>
                     
@@ -51,6 +58,7 @@
                     
                     <button class="btn btn-default btn-danger oc-icon-times"
                            data-request="{{ __SELF__ }}::onCloseForm"
+                            data-request-loading="#fs-closing-loader"
                            {% if writable %}
                            data-request-confirm="Unsaved changes will be lost. Are you sure?"
                            {% endif %}

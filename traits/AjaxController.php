@@ -159,6 +159,17 @@ trait AjaxController {
         if (! $data = Input::get('data')) {
             return false;
         }
+
+        // Resolve belongsTo relations
+        foreach($model->belongsTo as $name => $definition) {
+            if (! isset($data[$name])) {
+                continue;
+            }
+
+            $key = isset($definition['key']) ? $definition['key'] : $name . '_id';
+            $data[$key] = (int) $data[$name];
+            unset($data[$name]);
+        }
         
         $this->deactivateModelValidation($model);
         if (! $model->update($data)) {
@@ -168,7 +179,7 @@ trait AjaxController {
         if (Input::get('close')) {
             return $this->onCloseForm();
         }
-    }  
+    }
     
     /**
      * Cancels the submission
