@@ -15,6 +15,3 @@ columns:
         type: text
         searchable: true
         sortable: true
-    foreign_title:
-        label: 'Foreign title'
-        type: text
