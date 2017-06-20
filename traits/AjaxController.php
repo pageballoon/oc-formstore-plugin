@@ -81,13 +81,13 @@ trait AjaxController {
             ],
             'Backend\FormWidgets\MarkdownEditor' => [
                 'label' => 'MarkdownEditor',
-                'code'  => 'markdowneditor'
+                'code'  => 'markdown'
             ],
             // Custom file upload for frontend use
             'Nocio\FormStore\Widgets\FrontendFileUpload' => [
                 'label' => 'FileUpload',
                 'code'  => 'fileupload'
-            ],
+            ]
         ];
         
         foreach ($widgets as $className => $widgetInfo) {
