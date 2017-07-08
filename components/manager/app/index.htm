@@ -11,18 +11,20 @@
             <div>
                 <h3>{{ form.title }}</h3>
 
-                <i class="icon-clock-o"></i>
+                {% if form.opens_at or form.closes_at %}
+                    <i class="icon-clock-o"></i>
 
-                {% if form.opens_at %}
-                    {{ form.opens_at.toDayDateTimeString()  }}
-                {% else %}
-                    open start
-                {% endif %}
-                -
-                {% if form.closes_at %}
-                    {{ form.closes_at.toDayDateTimeString() }}
-                {% else %}
-                    open end
+                    {% if form.opens_at %}
+                        {{ form.opens_at.toDayDateTimeString()  }}
+                    {% else %}
+                        open start
+                    {% endif %}
+                    -
+                    {% if form.closes_at %}
+                        {{ form.closes_at.toDayDateTimeString() }}
+                    {% else %}
+                        open end
+                    {% endif %}
                 {% endif %}
 
                 <p>

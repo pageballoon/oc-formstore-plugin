@@ -145,7 +145,7 @@
                                 data-request="{{ __SELF__ }}::onSubmitSubmission"
                                 data-request-data="submission: {{ submission.id }}"
                                 data-request-loading="#fs-loader-submission-{{ submission.id }}"
-                                data-request-confirm="Are you sure?">
+                                data-request-confirm="Once submitted, you will not be able to change your data again. Are you sure?">
                             Submit
                         </button>
                         {% endif %}
@@ -155,7 +155,7 @@
                                 data-request="{{ __SELF__ }}::onCancelSubmission"
                                 data-request-loading="#fs-loader-submission-{{ submission.id }}"
                                 data-request-data="submission: {{ submission.id }}"
-                                data-request-confirm="Are you sure?">
+                                data-request-confirm="This will delete all data and withdraw your submission. Are you sure?">
                             Cancel
                         </button>
                     </td>
