@@ -1,0 +1,19 @@
+scopes:
+    form:
+        label: Form
+        modelClass: Nocio\FormStore\Models\Form
+        conditions: form_id in (:filtered)
+        nameFrom: title
+    status:
+        label: Status
+        type: group
+        conditions: status in (:filtered)
+        options:
+            0: Draft
+            1: Cancelled
+            2: Submitted
+    submitter:
+        label: Submitter
+        modelClass: Nocio\FormStore\Models\Submitter
+        conditions: submitter_id in (:filtered)
+        nameFrom: email

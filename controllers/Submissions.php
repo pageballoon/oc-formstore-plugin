@@ -26,9 +26,13 @@ class Submissions extends Controller
     
     public function renderDataPreview() {
         $submission = $this->widget->form->model;
+
+        if (! $model = $submission->data()->first()) {
+            return 'No data available, as the submission has been cancelled by the user.';
+        }
         
         $config = $this->makeConfig($submission->form->getFieldsConfig());
-        $config->model = $submission->data()->first();
+        $config->model = $model;
         
         $formWidget = new \Backend\Widgets\Form($this, $config);
         
