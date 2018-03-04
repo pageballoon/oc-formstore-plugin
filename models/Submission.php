@@ -40,12 +40,12 @@ class Submission extends Model
      * Status codes
      * @var int
      */
-    protected $STATE_NONE = 0;
-    protected $STATE_CANCELLED = 1;
-    protected $STATE_SUBMITTED = 2;
-    protected $STATUS_NONE = 'Draft';
-    protected $STATUS_CANCELLED = 'Cancelled';
-    protected $STATUS_SUBMITTED = 'Submitted';
+    public $STATE_NONE = 0;
+    public $STATE_CANCELLED = 1;
+    public $STATE_SUBMITTED = 2;
+    public $STATUS_NONE = 'Draft';
+    public $STATUS_CANCELLED = 'Cancelled';
+    public $STATUS_SUBMITTED = 'Submitted';
 
     
     public function getStatusAttribute($attribute) {
