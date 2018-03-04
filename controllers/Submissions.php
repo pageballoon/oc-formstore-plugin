@@ -28,7 +28,7 @@ class Submissions extends Controller
         $submission = $this->widget->form->model;
         
         $config = $this->makeConfig($submission->form->getFieldsConfig());
-        $config->model = $submission;
+        $config->model = $submission->data()->first();
         
         $formWidget = new \Backend\Widgets\Form($this, $config);
         

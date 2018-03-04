@@ -25,3 +25,4 @@
 1.1.9: Hide menu item from users with insufficient permissions
 1.1.10: Improved error messages for create model exceptions
 1.1.11: Fixed issue where submission status is not displayed correctly
+1.1.12: Fixed issue that caused submitted data not being displayed in backend
