@@ -1,17 +1,17 @@
 plugin:
     name: 'nocio.formstore::lang.plugin.name'
     description: 'nocio.formstore::lang.plugin.description'
-    author: 'Frithjof Gressmann'
+    author: 'noc.io'
     homepage: 'http://www.noc.io'
 permissions:
     nocio.formstore.manage_forms:
-        tab: Forms
+        tab: FormStore
         label: 'Manage forms'
     nocio.formstore.view_submissions:
-        tab: Submissions
+        tab: FormStore
         label: 'View submissions'
     nocio.formstore.manage_submissions:
-        tab: Submissions
+        tab: FormStore
         label: 'Manage submissions'
 navigation:
     main-menu-item:

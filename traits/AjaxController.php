@@ -1,6 +1,7 @@
 <?php namespace Nocio\FormStore\Traits;
 
 use Input;
+use Flash;
 use Validator;
 use Mail;
 use Nocio\FormStore\Models\Submission;
@@ -9,6 +10,7 @@ use Response;
 use Cookie;
 use Redirect;
 use Backend\Classes\WidgetManager;
+use October\Rain\Exception\ApplicationException;
 
 trait AjaxController {
     
@@ -49,16 +51,33 @@ trait AjaxController {
         
         // Insert data
         $model = '\\' . $form->model;
-        $this->deactivateModelValidation($model);
-        $data = $model::create();
-        
+        if (! class_exists($model)) {
+            throw new ApplicationException(
+                "Error: The form's model could not be found.\n".
+                "\t Please check the form settings."
+            );
+        }
+
+        try {
+            $this->deactivateModelValidation($model);
+            $data = $model::create();
+        } catch (\Exception $e) {
+            throw new ApplicationException(
+                "Error: The form's model could not be created.\n".
+                "\t Please check the model definition.\n\n".
+                "\t Ensure that:\n\n".
+                "\t - the model can created empty/is nullable\n".
+                "\t - the fields support mass-assignment\n"
+            );
+        }
+
         $submission = new Submission();
         $submission->form_id = $form_id;
         $submission->submitter_id = $this->submitter->id;
         $submission->data_id = $data->id;
         $submission->data_type = $form->model;
         $submission->save();
-        
+
         return $this->refreshForm($form);
     }
     
@@ -147,7 +166,7 @@ trait AjaxController {
         }
 
         if (! $this->submission->isWritable()) {
-            return;
+            throw new ApplicationException("Error: The form cannot be edited.");
         }
         
         if (Input::get('relation')) {
@@ -157,7 +176,7 @@ trait AjaxController {
         }
         
         if (! $data = Input::get('data')) {
-            return false;
+            throw new ApplicationException("Error: The form could not be saved.");
         }
 
         // Resolve belongsTo relations
@@ -173,7 +192,7 @@ trait AjaxController {
         
         $this->deactivateModelValidation($model);
         if (! $model->update($data)) {
-            return false; // @todo: error handling
+            throw new ApplicationException("Error: The form could not be saved.");
         }
 
         if (Input::get('close')) {

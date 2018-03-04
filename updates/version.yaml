@@ -23,3 +23,4 @@
 1.1.7: Read-only filelist improvements
 1.1.8: Minor UI improvements
 1.1.9: Hide menu item from users with insufficient permissions
+1.1.10: Improved error messages for create model exceptions

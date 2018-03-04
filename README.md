@@ -65,7 +65,7 @@ The available forms can be managed in the plugins backend under ``Stored forms``
 
 It is important to understand that the plugin does not provide own form definitions or database models. Instead, existing models are used to define a form. To create your custom form, it is recommended to use the [Builder plugin](http://octobercms.com/plugin/rainlab-builder). Please refer to its documentation to learn how to create models and form definitions. Please note that not all backend widgets are supported. Moreover, the file upload widget has currently some limitations, i.e. insufficient validation.
 
-**Important**: The model has to allow mass assignment for the fields that are present in the form. Refer to the [model documentation](https://octobercms.com/docs/database/model#mass-assignment) for more information.
+**Important**: The model has to allow mass assignment for the fields that are present in the form. Refer to the [model documentation](https://octobercms.com/docs/database/model#mass-assignment) for more information. Moreover, as the form is created empty, the model fields must be nullable or define default values.
 
 **! WARNING !** Never specify any system models that could be used to compromise the system.
 
