@@ -76,6 +76,7 @@ trait AjaxController {
         $submission->submitter_id = $this->submitter->id;
         $submission->data_id = $data->id;
         $submission->data_type = $form->model;
+        $submission->treated = date('Y-m-d H:i:s');
         $submission->save();
 
         return $this->refreshForm($form);

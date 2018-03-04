@@ -12,7 +12,7 @@ class BuilderTableCreateNocioFormstoreSubmissions extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('status')->default(0);
-            $table->dateTime('treated');
+            $table->dateTime('treated')->nullable();
             $table->integer('submitter_id');
             $table->integer('form_id');
             $table->integer('data_id');
