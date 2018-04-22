@@ -1,0 +1,19 @@
+subject = "Form submitted"
+layout = "default"
+==
+Hi,
+
+{{ submitter.email }} has just submitted a form "{{ form.title }}":
+
+{{ url('backend/nocio/formstore/submissions/preview') }}/{{ submission.id }}
+
+==
+<p>Hi,</p>
+
+<p>{{ submitter.email }} has just submitted a form "{{ form.title }}"</p>
+
+<p>
+    <a href="{{ url('backend/nocio/formstore/submissions/preview') }}/{{ submission.id }}">
+    View online
+    </a>
+<p>

@@ -27,3 +27,5 @@
 1.1.11: Fixed issue where submission status is not displayed correctly
 1.1.12: Fixed issue that caused submitted data not being displayed in backend
 1.1.13: Adding submission list filters
+1.1.14: New nocio.formstore.create event
+1.1.15: Adding support for Rainlab.Notify plugin

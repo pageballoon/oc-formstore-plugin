@@ -2,7 +2,6 @@
 
 use Model;
 use Event;
-use Backend;
 
 /**
  * Model
@@ -255,7 +254,32 @@ class Submission extends Model
      * @return type
      */
     public function scopeActive($query) {
-        return $query->where('status', '!=', $this->STATUS_CANCELLED);
+        return $query->where('status', '!=', $this->STATE_CANCELLED);
+    }
+
+
+    /**
+     * Returns the variables available when sending a submission notification.
+     * @return array
+     */
+    public function getNotificationVars()
+    {
+
+        $vars = [
+            'id'        => $this->id,
+            'status'    => $this->status,
+            'treated'   => $this->treated,
+        ];
+
+        if ($submitter = $this->submitter) {
+            $vars['submitter'] = $vars['sender'] = $submitter;
+        }
+
+        if ($form = $this->form) {
+            $vars['form'] = $form;
+        }
+
+        return $vars;
     }
 
 }

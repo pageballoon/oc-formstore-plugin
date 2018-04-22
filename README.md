@@ -99,6 +99,7 @@ The backend also allows to view and manage submissions and submitters. Note that
 
 It is possible to hook into the submission cycle at the following events:
 
+- `nocio.formstore.create`(`$submission`) - when a submission is created
 - `nocio.formstore.withdraw`(`$submission`) - when a submission is withdrawed
 - `nocio.formstore.submit`(`$submission`): - when a submission is submitted
 - events to override the authentication method - see below
@@ -110,6 +111,8 @@ The events can, for instance, be used to send an email notification when a user 
             'submission' => $submission
         ]);
     });
+    
+FormStore supports [Rainlab's Notification Plugin](https://octobercms.com/plugin/rainlab-notify) which sends notifications across a variety of different channels. Using the plugin, it is, for instance, easy configure email messages where the submitter becomes the event 'sender'.
 
 ### Custom authentication methods
 

@@ -4,6 +4,7 @@ use Input;
 use Flash;
 use Validator;
 use Mail;
+use Event;
 use Nocio\FormStore\Models\Submission;
 use Nocio\FormStore\Models\Form;
 use Response;
@@ -78,6 +79,8 @@ trait AjaxController {
         $submission->data_type = $form->model;
         $submission->treated = date('Y-m-d H:i:s');
         $submission->save();
+
+        Event::fire('nocio.formstore.create', [$submission]);
 
         return $this->refreshForm($form);
     }
