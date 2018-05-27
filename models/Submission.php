@@ -276,7 +276,7 @@ class Submission extends Model
         }
 
         if ($form = $this->form) {
-            $vars['form'] = $form;
+            $vars['p.'] = $form;
         }
 
         return $vars;

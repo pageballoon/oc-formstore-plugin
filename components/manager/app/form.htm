@@ -1,5 +1,8 @@
 {% set submissions = __SELF__.submitter.submissions().byForm(form).latest().get() %}
 
+<p>
+{{ form.introduction | raw }}
+</p>
 <div>
 
     {% if form.opens_at.isFuture() %}
@@ -12,6 +15,13 @@
         </p>
     {% else %}
         {% if not form.submittedMaximum(__SELF__.submitter)  %}
+        {% if form.tac_enabled %}
+            <div class="callout fade in callout-info">
+                <div class="content">
+                    {{ form.tac | raw }}
+                </div>
+            </div>
+        {% endif %}
             <div class="control-toolbar">
                 <div class="toolbar-item toolbar-primary">
                     <div data-control="toolbar">

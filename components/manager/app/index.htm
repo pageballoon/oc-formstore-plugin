@@ -26,14 +26,6 @@
                         open end
                     {% endif %}
                 {% endif %}
-
-                <p>
-                    {{ form.introduction | raw }}
-
-                    {% if form.tac_enabled %}
-                       {{ form.tac | raw }}
-                    {% endif %}
-                </p>
                 <div id="fs-form-{{ form.id }}">
                     {% partial '@app/form' form=form %}
                 </div>
