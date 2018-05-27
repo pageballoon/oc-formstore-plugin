@@ -6,5 +6,3 @@ attributes:
     form_id:
         label: Form
         type: number
-    data_type:
-        label: Data model
