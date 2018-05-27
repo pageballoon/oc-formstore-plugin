@@ -30,3 +30,4 @@
 1.1.14: New nocio.formstore.create event
 1.1.15: Adding support for Rainlab.Notify plugin
 1.1.16: Hide terms and conditions if maximum number of submissions is reached
+1.1.17: Rainlab.Notify condition for form_id
