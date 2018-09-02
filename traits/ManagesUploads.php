@@ -4,6 +4,50 @@ use Input;
 use Request;
 use Response;
 use File;
+use Validator;
+
+// Returns a file size limit in bytes based on the PHP upload_max_filesize
+// and post_max_size
+function file_upload_max_size() {
+    static $max_size = -1;
+
+    if ($max_size < 0) {
+        // Start with post_max_size.
+        $post_max_size = parse_size(ini_get('post_max_size'));
+        if ($post_max_size > 0) {
+            $max_size = $post_max_size;
+        }
+
+        // If upload_max_size is less, then reduce. Except if upload_max_size is
+        // zero, which indicates no limit.
+        $upload_max = parse_size(ini_get('upload_max_filesize'));
+        if ($upload_max > 0 && $upload_max < $max_size) {
+            $max_size = $upload_max;
+        }
+    }
+    return $max_size;
+}
+
+function parse_size($size) {
+    $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
+    $size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
+    if ($unit) {
+        // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+        return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+    }
+    else {
+        return round($size);
+    }
+}
+
+function human_filesize($bytes, $dec = 2)
+{
+    $size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+    $factor = floor((strlen($bytes) - 1) / 3);
+
+    return sprintf("%.{$dec}f", $bytes / pow(1024, $factor)) . @$size[$factor];
+}
+
 
 trait ManagesUploads {
     
@@ -44,24 +88,19 @@ trait ManagesUploads {
         return implode(',', $types);
     }
     
-    private function validateUpload($uploadedFile) {
-        $validationRules = ['max:' . File::getMaxFilesize()];
+    private function validateUpload() {
+        $validationRules = ['max:' . (string) file_upload_max_size()];
         
         //if ($fileTypes = $this->processFileTypes()) {
         //    $validationRules[] = 'extensions:' . $fileTypes;
         //}
 
-        $validation = Validator::make(
-            ['file_data' => $uploadedFile],
-            ['file_data' => $validationRules]
-        );
+        $validation = Validator::make(Request::all(), [
+            'file_data' => $validationRules
+        ]);
 
         if ($validation->fails()) {
-            throw new ValidationException($validation);
-        }
-
-        if (!$uploadedFile->isValid()) {
-            throw new \Exception(sprintf('File %s is not valid.', $uploadedFile->getClientOriginalName()));
+            throw new \Exception($validation->messages()->first('file_data'));
         }
     }
     
@@ -70,20 +109,28 @@ trait ManagesUploads {
      * @return mixed
      */
     protected function processUploads() {
-        
-        if ( ! Input::hasFile('file_data')) {
+        if (! Request::header('X-OCTOBER-FILEUPLOAD')) {
             return false;
         }
-        
+
         try {
             $uploadedFile = Input::file('file_data');
-            $model_field = Request::header('X-OCTOBER-FILEUPLOAD');
 
+            if ( ! Input::hasFile('file_data')) {
+                $max_upload = human_filesize(file_upload_max_size(), 1);
+                throw new \Exception('File exceeds file upload limit of ' . $max_upload);
+            }
+
+            if (!$uploadedFile->isValid()) {
+                throw new \Exception(sprintf('File %s is not valid.', $uploadedFile->getClientOriginalName()));
+            }
+
+            $model_field = Request::header('X-OCTOBER-FILEUPLOAD');
             if (! $this->model->hasRelation($model_field)) {
                 throw new \Exception('Invalid field');
             }
             
-            //$this->validateUpload($uploadedFile);
+            // $this->validateUpload();
             
             $fileModel = $this->model->getRelationDefinition($model_field)[0];
             
@@ -104,7 +151,7 @@ trait ManagesUploads {
 
             return Response::json($result, 200);
         }
-        catch (Exception $ex) {
+        catch (\Exception $ex) {
             return Response::json($ex->getMessage(), 400);
         }
     }
