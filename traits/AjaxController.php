@@ -19,6 +19,30 @@ trait AjaxController {
     
     public $widget;
 
+    public $backendWidgets = [
+            'Backend\FormWidgets\DatePicker' => [
+                'label' => 'Date picker',
+                'code'  => 'datepicker'
+            ],
+            'Backend\FormWidgets\RichEditor' => [
+                'label' => 'Rich editor',
+                'code'  => 'richeditor'
+            ],
+            'Backend\FormWidgets\Relation' => [
+                'label' => 'Relation',
+                'code'  => 'relation'
+            ],
+            'Backend\FormWidgets\MarkdownEditor' => [
+                'label' => 'MarkdownEditor',
+                'code'  => 'markdown'
+            ],
+            // Custom file upload for frontend use
+            'Nocio\FormStore\Widgets\FrontendFileUpload' => [
+                'label' => 'FileUpload',
+                'code'  => 'fileupload'
+            ]
+        ];
+
     /**
      * Auth middleware
      */
@@ -30,7 +54,6 @@ trait AjaxController {
 
     }
 
-    
     /** 
      * Creates a new form submission
      * @return boolean
@@ -89,33 +112,9 @@ trait AjaxController {
      * Registers backend widgets for frontend use
      */
     public function loadBackendFormWidgets() {
-        $widgets = [
-            'Backend\FormWidgets\DatePicker' => [
-                'label' => 'Date picker',
-                'code'  => 'datepicker'
-            ],
-            'Backend\FormWidgets\RichEditor' => [
-                'label' => 'Rich editor',
-                'code'  => 'richeditor'
-            ],
-            'Backend\FormWidgets\Relation' => [
-                'label' => 'Relation',
-                'code'  => 'relation'
-            ],
-            'Backend\FormWidgets\MarkdownEditor' => [
-                'label' => 'MarkdownEditor',
-                'code'  => 'markdown'
-            ],
-            // Custom file upload for frontend use
-            'Nocio\FormStore\Widgets\FrontendFileUpload' => [
-                'label' => 'FileUpload',
-                'code'  => 'fileupload'
-            ]
-        ];
-
-        Event::fire('nocio.formstore.widgets', [$widgets, $this->alias]);
+        Event::fire('nocio.formstore.widgets', [$this]);
         
-        foreach ($widgets as $className => $widgetInfo) {
+        foreach ($this->backendWidgets as $className => $widgetInfo) {
             WidgetManager::instance()->registerFormWidget($className, $widgetInfo);
         }
     }
