@@ -112,10 +112,17 @@ trait AjaxController {
                 'code'  => 'fileupload'
             ]
         ];
+
+        Event::fire('nocio.formstore.widgets', [$widgets, $this->alias]);
         
         foreach ($widgets as $className => $widgetInfo) {
             WidgetManager::instance()->registerFormWidget($className, $widgetInfo);
         }
+    }
+
+    public function formGetWidget()
+    {
+        return $this->widget;
     }
     
     public function editor($form, $model) {
@@ -124,7 +131,7 @@ trait AjaxController {
         $config->alias = $this->alias;
         $config->model = $model;
         
-        $formWidget = new \Backend\Widgets\Form($this, $config);
+        $this->widget = new \Backend\Widgets\Form($this, $config);
         
         $this->loadBackendFormWidgets();
         
