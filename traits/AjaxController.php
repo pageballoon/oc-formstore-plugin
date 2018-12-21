@@ -14,10 +14,15 @@ use Backend\Classes\WidgetManager;
 use October\Rain\Exception\ApplicationException;
 
 trait AjaxController {
-    
+
     use \System\Traits\ConfigMaker;
-    
+
     public $widget;
+
+    public function formGetWidget()
+    {
+        return $this->widget;
+    }
 
     /**
      * Auth middleware
@@ -30,8 +35,8 @@ trait AjaxController {
 
     }
 
-    
-    /** 
+
+    /**
      * Creates a new form submission
      * @return boolean
      */
@@ -40,16 +45,16 @@ trait AjaxController {
         if ($response = $this->middleware()) {
             return $response;
         }
-        
+
         if ( ! in_array($form_id = Input::get('form'), $this->property('forms'))
                 || ! $form = Form::find($form_id)) {
             return false;
         }
-        
+
         if ($form->submittedMaximum($this->submitter)) {
             return false;
         }
-        
+
         // Insert data
         $model = '\\' . $form->model;
         if (! class_exists($model)) {
@@ -84,7 +89,7 @@ trait AjaxController {
 
         return $this->refreshForm($form);
     }
-    
+
     /**
      * Registers backend widgets for frontend use
      */
@@ -112,30 +117,32 @@ trait AjaxController {
                 'code'  => 'fileupload'
             ]
         ];
-        
+
+        Event::fire('nocio.formstore.widgets', [&$widgets, $this->alias]);
+
         foreach ($widgets as $className => $widgetInfo) {
             WidgetManager::instance()->registerFormWidget($className, $widgetInfo);
         }
     }
-    
+
     public function editor($form, $model) {
         $config = $this->makeConfig($form->getFieldsConfig());
         $config->arrayName = 'data';
         $config->alias = $this->alias;
         $config->model = $model;
-        
-        $formWidget = new \Backend\Widgets\Form($this, $config);
-        
+
+        $this->widget = new \Backend\Widgets\Form($this, $config);
+
         $this->loadBackendFormWidgets();
-        
-        $html = $formWidget->render(['preview' => ! $this->submission->isWritable()]);
-        
+
+        $html = $this->widget->render(['preview' => ! $this->submission->isWritable()]);
+
         return [
-            '#app' => $this->renderPartial('@app/edit', 
+            '#app' => $this->renderPartial('@app/edit',
                 ['form' => $html, 'data_id' => $model->id])
         ];
     }
-    
+
     /**
      * Edits a submission
      * @return type
@@ -147,7 +154,7 @@ trait AjaxController {
 
         return $this->editor($this->submission->form, $this->submission->data);
     }
-    
+
     /**
      * Edits a relation
      * @return boolean
@@ -158,12 +165,12 @@ trait AjaxController {
         }
 
         if (! $model = $this->submission->getDataField($this->relation->field)->find(Input('data_id'))) {
-           return false; 
+           return false;
         }
-        
+
         return $this->editor($this->relation->target, $this->model);
     }
-    
+
     public function onSave() {
         if ($response = $this->middleware()) {
             return $response;
@@ -172,13 +179,13 @@ trait AjaxController {
         if (! $this->submission->isWritable()) {
             throw new ApplicationException("Error: The form cannot be edited.");
         }
-        
+
         if (Input::get('relation')) {
             $model = $this->submission->getDataField($this->relation->field)->find(Input('data_id'));
         } else {
             $model = $this->submission->data;
         }
-        
+
         if (! $data = Input::get('data')) {
             throw new ApplicationException("Error: The form could not be saved.");
         }
@@ -193,7 +200,7 @@ trait AjaxController {
             $data[$key] = (int) $data[$name];
             unset($data[$name]);
         }
-        
+
         $this->deactivateModelValidation($model);
         if (! $model->update($data)) {
             throw new ApplicationException("Error: The form could not be saved.");
@@ -203,7 +210,7 @@ trait AjaxController {
             return $this->onCloseForm();
         }
     }
-    
+
     /**
      * Cancels the submission
      */
@@ -215,7 +222,7 @@ trait AjaxController {
         $this->submission->withdraw($this->alias);
         return $this->refreshForm();
     }
-    
+
     /**
      * Submits the submission
      */
@@ -225,10 +232,10 @@ trait AjaxController {
         }
 
         if ($this->submission->submit($this->alias)) {
-            return $this->refreshForm();  
+            return $this->refreshForm();
         }
     }
-    
+
     /**
      * Closes the form
      * @return type
@@ -242,7 +249,7 @@ trait AjaxController {
             '#app' => $this->renderPartial('@app/index')
         ];
     }
-    
+
 
     public function onRemoveRelated() {
         if ($response = $this->middleware()) {
@@ -252,16 +259,16 @@ trait AjaxController {
         if (! $this->submission->isWritable()) {
             return;
         }
-        
+
         if (! $model = $this->submission->getDataField($this->relation->field)->find(Input('data_id'))) {
-           return false; 
+           return false;
         }
-        
+
         $model->delete();
-        
+
         return $this->refreshForm();
     }
-    
+
     public function onCreateRelated() {
         if ($response = $this->middleware()) {
             return $response;
@@ -270,23 +277,23 @@ trait AjaxController {
         if (! $this->submission->isWritable()) {
             return;
         }
-        
+
         $form = $this->relation->target;
         $field = $this->submission->getDataField($this->relation->field);
-        
+
         if($form->max_per_user != -1 && $field->count() >= $form->max_per_user) {
             return Response::json('Maximum number of ' . $form->title . ' reached.', 400);
         }
-        
+
         $model = '\\' . $form->model;
         $this->deactivateModelValidation($model);
         $child_model = $model::create();
-        
+
         $field->add($child_model);
-        
+
         return $this->refreshForm();
     }
-    
+
     /**
      * Returns a refreshed relation
      * @return type
@@ -301,7 +308,7 @@ trait AjaxController {
             $this->renderPartial('@app/relation')
         ];
     }
-    
+
     /**
      * Returns a refreshed from
      * @param Model $form Optional model
@@ -313,13 +320,13 @@ trait AjaxController {
                 return false;
             }
         }
-        
+
         return [
-            '#fs-form-' . $form->id => 
+            '#fs-form-' . $form->id =>
                 $this->renderPartial('@app/form', ['form' => $form])
         ];
     }
-    
+
     /**
      * Deactivates the validation of a given model
      * @param mixed $model
@@ -330,14 +337,14 @@ trait AjaxController {
                 $model->rules = [];
             }
         };
-        
+
         if (is_string($model)) {
             $model::extend($closure);
         }
-        
+
         if (is_object($model)) {
             $closure($model);
         }
     }
-    
+
 }

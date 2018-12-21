@@ -63,7 +63,7 @@ The countdown provides information about the opening and closing time of a form.
 
 The available forms can be managed in the plugins backend under ``Stored forms``.
 
-It is important to understand that the plugin does not provide own form definitions or database models. Instead, existing models are used to define a form. To create your custom form, it is recommended to use the [Builder plugin](http://octobercms.com/plugin/rainlab-builder). Please refer to its documentation to learn how to create models and form definitions. Please note that not all backend widgets are supported. Moreover, the file upload widget has currently some limitations, i.e. insufficient validation.
+It is important to understand that the plugin does not provide own form definitions or database models. Instead, existing models are used to define a form. To create your custom form, it is recommended to use the [Builder plugin](http://octobercms.com/plugin/rainlab-builder). Please refer to its documentation to learn how to create models and form definitions. Please note that not all backend widgets are enabled by default; you can, however, use events to load custom widget use (see below). Also note, that the default file upload widget has currently some limitations like insufficient validation.
 
 **Important**: The model has to allow mass assignment for the fields that are present in the form. Refer to the [model documentation](https://octobercms.com/docs/database/model#mass-assignment) for more information. Moreover, as the form is created empty, the model fields must be nullable or define default values.
 
@@ -101,7 +101,8 @@ It is possible to hook into the submission cycle at the following events:
 
 - `nocio.formstore.create`(`$submission`) - when a submission is created
 - `nocio.formstore.withdraw`(`$submission`) - when a submission is withdrawed
-- `nocio.formstore.submit`(`$submission`): - when a submission is submitted
+- `nocio.formstore.submit`(`$submission`) - when a submission is submitted
+- event to load custom form widgets - see below
 - events to override the authentication method - see below
 
 The events can, for instance, be used to send an email notification when a user submits a form:
@@ -111,12 +112,23 @@ The events can, for instance, be used to send an email notification when a user 
             'submission' => $submission
         ]);
     });
-    
+
 FormStore supports [Rainlab's Notification Plugin](https://octobercms.com/plugin/rainlab-notify) which sends notifications across a variety of different channels. Using the plugin, it is, for instance, easy configure email messages where the submitter becomes the event 'sender'.
+
+### Use of custom form widgets
+
+Only a limited number of form widgets are enabled by default. However, enabling custom widgets is possible through the widgets event that receives the form widget array by reference. For example, the following event subscription enables the address finder widget of Rainlab's Location plugin:
+
+    Event::listen('nocio.formstore.widgets', function(&$widgets, $alias) {
+       $widgets["RainLab\Location\FormWidgets\AddressFinder"] = [
+           'label' => 'AddressFinder',
+           'code' => 'addressfinder'
+       ];
+    });
 
 ### Custom authentication methods
 
-It is possible to override the default authentication mechanism and use other options instead. In the following example, the ``Rainlab.User`` plugin will be used to authenticate the user. 
+It is possible to override the default authentication mechanism and use other options instead. In the following example, the ``Rainlab.User`` plugin will be used to authenticate the user.
 
 First it is necessary to provide a custom submitter object with the following (duck-typed) properties:
 

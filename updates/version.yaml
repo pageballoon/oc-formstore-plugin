@@ -32,3 +32,4 @@
 1.1.16: Hide terms and conditions if maximum number of submissions is reached
 1.1.17: Rainlab.Notify condition for form_id
 1.1.18: Handle max_file_upload_size correctly
+1.1.19: Support for custom form widgets
