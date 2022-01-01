@@ -1,0 +1,8 @@
+{
+    "name": "nocio/formstore-plugin",
+    "type": "october-plugin",
+    "description": "Flexible frontend form manager for OctoberCMS",
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
